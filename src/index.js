@@ -1,3 +1,5 @@
+import "./index.css";
+
 //自定义向量构造函数
 class vector{
     constructor(x ,y){
@@ -33,7 +35,9 @@ function birdMove(proportion) {
 function touchStart(event){
     let finger = event.touches[0];
 
-    currentY = preY = finger.pageY;
+    //保证只执行一次
+    if(!preY)
+        currentY = preY = finger.pageY;
 }
 
 function touchMove(event){
@@ -41,12 +45,16 @@ function touchMove(event){
 
     currentY = finger.pageY;
 
-    let moveY = currentY - preY;
-
-    img.style.transform = "translate(moveY, 0)";
-    img.style.webkitTransform = "translate(moveY, 0)";
+    let moveY = currentY - preY,
+        imageX = image.style.transform.match(patt)[1];
+        
+    console.log(currentY, preY)
+    image.style.transform = "translate(" + parseInt(imageX - moveY) + "px, 0)";
+    image.style.webkitTransform = "translate(" + parseInt(imageX - moveY) + "px, 0)";
 
     birdMove(moveY / moveWidth);
+
+    preY = currentY;
 }
 
 // 配置位移矢量 一共走100步
@@ -56,10 +64,14 @@ let curStep = 0;
 const path = document.getElementById('motionPath');
 const bird = document.getElementById('crayImg');
 const image = document.getElementsByTagName('img')[0];
+image.style.transform = "translate(0, 0)";
 
 // 最重要的两个属性  获取长度，以及每个点的坐标
 const totalLength = path.getTotalLength();
 const initPosition = path.getPointAtLength(0);
+
+//正则匹配，获取偏移
+const patt = new RegExp(/translate\(-?(\d+)(?:px)/,"i");
 
 //背景图片长度，鸟坐标位置记录，当前移动的路径长度
 const moveWidth = image.width - window.innerWidth;
@@ -75,5 +87,5 @@ const birdVector = new vector(-1, 0);
 //手指触点位置
 let preY, currentY;
 
-document.addEventListener('touchstart',touchStart, false);
-document.addEventListener('touchmove',touchMove, false);
+document.addEventListener('touchstart', touchStart);
+document.addEventListener('touchmove', touchMove);

@@ -3,9 +3,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: {
-   app: './src/index.js',
-  },
+  entry: './src/index.js',
   output: {
       path: path.resolve(__dirname, './dist'),
       publicPath: './',
@@ -20,7 +18,32 @@ module.exports = {
             fallback: "style-loader",
             use: 'css-loader'
         })    
+      },
+
+      {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        use:[
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 500,
+              name: 'img/[name].[hash:7].[ext]',
+            }
+          }
+        ]
+      },
+
+      {
+        test: /\.(html)$/,
+        use: {
+          loader: 'html-loader',
+          options: {
+            minimize: true,
+            attrs: ['img:src']
+          }
+        }
       }
+      
     ]
   },
 
@@ -32,7 +55,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       template:'./index.html',//模板文件
       filename:'index.html',//目标文件
-      chunks:['app'],//对应加载的资源
       inject:true,//资源加入到底部
       hash:true//加入版本号
     })
@@ -45,4 +67,9 @@ module.exports = {
     inline: true, //实时刷新
     open: true //是否运行成功后直接打开页面
   },
+
+  //不显示警告
+  performance: {
+    hints: false
+  }
 }

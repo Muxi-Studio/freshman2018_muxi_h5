@@ -1,0 +1,32 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+}
+html,body{
+    width: 100%;
+    height: 100%;
+}
+.contain{
+    position: relative;
+    width: 100%;
+    height: 100%; 
+}
+.backgroundImage{
+    vertical-align: middle;
+    height: 100%;
+}
+.svgMove{
+    position: relative;
+    height: 100%;
+    top: -100%;
+    font-size: 0;
+}
+#crayImg{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50px;
+}
+#motionPath{
+    visibility: hidden;
+}

@@ -22,6 +22,7 @@ function birdMove(proportion) {
      
     bird.style.left = curPosition.x + 'px';
     bird.style.top = curPosition.y + 'px';
+
     //  如果小于0，顺时针旋转(朝上)
     if(curPosition.y - prePosition.y < 0)
         bird.style.webkitTransform = 'rotate('+ birdVector.calcuAngle(vector2) +'deg)';
@@ -29,32 +30,53 @@ function birdMove(proportion) {
     else
         bird.style.webkitTransform = 'rotate('+ -1 * birdVector.calcuAngle(vector2) +'deg)';
     
-    prePosition = curPosition;
+    prePosition = new vector(curPosition.x, curPosition.y);
 }
 
 function touchStart(event){
     let finger = event.touches[0];
 
-    //保证只执行一次
-    if(!preY)
-        currentY = preY = finger.pageY;
+    currentY = preY = finger.pageY;
+
+    event.target.addEventListener('touchmove', touchMove, {passive: true});
+    event.target.addEventListener('touchcancel', touchCancel, {passive: true});
 }
 
 function touchMove(event){
     let finger = event.touches[0];
 
-    currentY = finger.pageY;
+    window.requestAnimationFrame(()=>{
+        currentY = finger.pageY;
 
-    let moveY = currentY - preY,
-        imageX = image.style.transform.match(patt)[1];
-        
-    console.log(currentY, preY)
-    image.style.transform = "translate(" + parseInt(imageX - moveY) + "px, 0)";
-    image.style.webkitTransform = "translate(" + parseInt(imageX - moveY) + "px, 0)";
+        let moveY = currentY - preY,
+            imageX = image.style.transform.match(patt)[1],
+            trans;
 
-    birdMove(moveY / moveWidth);
+        if((moveY < 0 && parseInt(imageX) === 0) || (moveY > 0 && parseInt(imageX) === -moveWidth)) 
+            return false;
 
-    preY = currentY;
+        birdMove(moveY / moveWidth);
+
+        preY = currentY;
+
+        if(imageX - moveY > 0)
+            trans = 0;
+
+        else if(moveY - imageX >= moveWidth)
+            trans = -moveWidth;
+
+        else
+            trans = parseInt(imageX - moveY);
+
+        image.style.transform = "translate(" + trans + "px, 0)";
+        image.style.webkitTransform = "translate(" + trans + "px, 0)";
+    })
+}
+
+function touchCancel(event){
+    let finger = event.touches[0];
+
+    preY = currentY = finger.pageY;
 }
 
 // 配置位移矢量 一共走100步
@@ -71,21 +93,20 @@ const totalLength = path.getTotalLength();
 const initPosition = path.getPointAtLength(0);
 
 //正则匹配，获取偏移
-const patt = new RegExp(/translate\(-?(\d+)(?:px)/,"i");
+const patt = new RegExp(/translate\((-?\d+)(?:px)/,"i");
 
 //背景图片长度，鸟坐标位置记录，当前移动的路径长度
 const moveWidth = image.width - window.innerWidth;
-let prePosition = initPosition;
-let curPosition = initPosition;
+let prePosition = new vector(initPosition.x, initPosition.y);
+let curPosition = new vector(initPosition.x, initPosition.y);
 let movedLength = 0;
 
 // 定位bird 
-bird.style.left = initPosition.x + 'px';
-bird.style.top = initPosition.y + 'px';
+bird.style.left = curPosition.x + 'px';
+bird.style.top = curPosition.y + 'px';
 const birdVector = new vector(-1, 0);
 
 //手指触点位置
 let preY, currentY;
 
 document.addEventListener('touchstart', touchStart);
-document.addEventListener('touchmove', touchMove);

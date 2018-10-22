@@ -1,7 +1,7 @@
 import './load.css';
 
 // let arr = ["bird.jpg", "background.png", "tunnel.jpeg", "house.jpeg", "computer.jpg", "androidHouse.png", "backendHouse.png", "designHouse.png", "loading.png", "light.jpeg"];
-let arr = ["tunnel.jpeg", "androidHouse.png", "backendHouse.png", "designHouse.png", "frontendHouse.png", "productHouse.png"]; 
+let arr = ["bird.jpg", "tunnel.jpeg", "androidHouse.png", "backendHouse.png", "designHouse.png"]; 
 let num = 0;
 
 window.onload = () => {

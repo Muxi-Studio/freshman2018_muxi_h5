@@ -1,0 +1,52 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: fixed;
+}
+.contain{
+    height: 100vh;
+    background: url(../img/tunnel.jpeg) no-repeat center;
+    /* 高度优先 */
+    background-size: auto 100vh; 
+}
+.continueBtn{
+    position: absolute;
+    left: 50vw;
+    top: 90vh;
+    color: purple;
+    font-size: 20px;
+    cursor: pointer;
+    transform: translateX(-50%);
+}
+.House{
+    position: absolute;
+    width: 10vw;
+    z-index: -1;
+}
+.backendHouse{
+    left: 20vw;
+    top: 20vh;
+}
+.androidHouse{
+    left: 50vw;
+    top: 50vh;
+}
+.designHouse{
+    left: 70vw;
+    top: 70vh;
+}
+#crayImg{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50px;
+    z-index: -1;
+}
+#motionPath{
+    visibility: hidden;
+}

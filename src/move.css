@@ -1,0 +1,178 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: fixed;
+}
+.origin{
+    position: relative;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    perspective: 100px;
+    touch-action: none;
+}
+.perspect{
+    animation: 3s perspective forwards;
+}
+@keyframes perspective {
+    0% {  
+        transform: translate(-50%, -50%) translateZ(0);
+    }
+    100% {
+        transform: translate(-50%, -50%) translateZ(80px);
+    }
+}
+.center{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.introduce{
+    font-size: 20px;
+    width: 80vw;
+    text-align: center;
+}
+.introClear{
+    animation: 3s disappear forwards;
+}
+@keyframes disappear{
+    0% {  
+        z-index: 0;
+        opacity: 1;
+    }
+    100% {
+        z-index: -1;
+        opacity: 0;
+    }
+}
+.continueBtn{
+    position: absolute;
+    left: 50vw;
+    top: 90vh;
+    color: purple;
+    font-size: 20px;
+    cursor: pointer;
+    transform: translateX(-50%);
+}
+.House{
+    display: inline-block;
+    position: absolute;
+    z-index: -1;
+    font-size: 0;
+}
+.frontendHouse{
+    left: 435vw;
+    top: 42vh; 
+}
+.backendHouse{
+    left: 330vw;
+    top: 49vh;
+}
+.androidHouse{
+    left: 220vw;
+    top: 40vh;
+}
+.designHouse{
+    left: 120vw;
+    top: 50vh;
+}
+.productHouse{
+    left: 20vw;
+    top: 36vh; 
+}
+.houseSize{
+    width: 60vw;
+}
+.light{
+    position: absolute;
+    width: 5vw;
+    height: 5vw;
+    border-radius: 50%;
+    cursor: pointer;
+    animation: lightShine 2s linear infinite;
+    transition: background-color 0.1s linear, opacity 0.1s linear 0.1s;
+}
+@keyframes lightShine{
+    0%{
+        box-shadow: inset 0 0 0 1vw white, 0 0 0vw white;
+    }
+    25%{
+        box-shadow: inset 0 0 0 1vw white, 0 0 5vw white;
+    }
+    50%{
+        box-shadow: inset 0 0 0 1vw white, 0 0 10vw white;
+    }
+    75%{
+        box-shadow: inset 0 0 0 1vw white, 0 0 5vw white;
+    }
+    100%{
+        box-shadow: inset 0 0 0 1vw white, 0 0 0vw white;
+    }
+}
+/* .light:hover{
+    background-color: white;
+    opacity: 0;
+} */
+.backendLight{
+    left: 10%;
+    top: 65%; 
+}
+.androidLight{
+    width: 3vw;
+    height: 3vw;
+    left: 83%;
+    top: 91%; 
+}
+.designLight{
+    left: 38%;
+    top: 74%; 
+}
+.frontendLight{
+    width: 4vw;
+    height: 4vw;
+    left: 33%;
+    top: 80%; 
+}
+.productLight{
+    width: 2vw;
+    height: 2vw;
+    left: 47%;
+    top: -1%;
+}
+.lightBig{
+    background-color: white;
+    animation: lightBig 2s linear forwards;
+}
+@keyframes lightBig{
+    0%{
+        transform: scale(1);
+        z-index: 10;
+    }
+    99%{
+        transform: scale(490);
+        z-index: -9;
+    }
+    100%{
+        transform: scale(500);
+        z-index: -10;
+    }
+}
+.groupIntro{
+    display: flex;
+    align-items: center;
+    width: 80vw;
+    height: 80vh;
+    background-color:rgb(00, 00, 00, 0.3);
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    /* opacity: 0; */
+}
+  

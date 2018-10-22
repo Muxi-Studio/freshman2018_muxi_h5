@@ -3,11 +3,14 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './src/index.js',
+  entry:{
+    move: './src/move.js',
+    load: './src/load.js'
+  },
   output: {
       path: path.resolve(__dirname, './dist'),
-      publicPath: './',
-      filename: 'js/bundle.js'
+      publicPath: '../',
+      filename: 'js/[name].js'
   },
 
   module:{
@@ -16,7 +19,8 @@ module.exports = {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
             fallback: "style-loader",
-            use: 'css-loader'
+            use: 'css-loader',
+            publicPath: '../',
         })    
       },
 
@@ -27,7 +31,7 @@ module.exports = {
             loader: 'url-loader',
             options: {
               limit: 500,
-              name: 'img/[name].[hash:7].[ext]',
+              name: 'img/[name].[ext]',
             }
           }
         ]
@@ -53,10 +57,19 @@ module.exports = {
 
     //对html模板进行处理，生成对应的html,引入需要的资源模块
     new HtmlWebpackPlugin({
-      template:'./index.html',//模板文件
-      filename:'index.html',//目标文件
+      template:'./move.html',//模板文件
+      filename:'move.html',//目标文件
       inject:true,//资源加入到底部
-      hash:true//加入版本号
+      hash:true,//加入版本号
+      chunks:['move'],
+    }),
+
+    new HtmlWebpackPlugin({
+      template:'./load.html',
+      filename:'index.html',
+      inject:true,
+      hash:true,
+      chunks:['load'],
     })
   ],
 

@@ -9,6 +9,36 @@ html,body{
     overflow: hidden;
     position: fixed;
 }
+#loadingImg{
+    width: 100%;
+    height: 100%;
+    background: url(../static/loading.png) no-repeat center;
+    background-size: cover;
+}
+#backgroundImg{
+    z-index: -1;
+}
+#audioBtn{
+    position: absolute;
+    left: 330px;
+    top: 5vw;
+    width: 39px;
+    height: 39px;
+}
+.audioRotate{
+    animation: 3s audioRotating linear infinite;
+}
+@keyframes audioRotating {
+    0% {  
+        transform: rotateZ(0);
+    }
+    50%{
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotateZ(360deg);
+    }
+}
 .origin{
     position: relative;
     left: 0;
@@ -18,14 +48,14 @@ html,body{
     touch-action: none;
 }
 .perspect{
-    animation: 3s perspective forwards;
+    animation: 2s perspective linear forwards;
 }
 @keyframes perspective {
     0% {  
-        transform: translate(-50%, -50%) translateZ(0);
+        transform: translateZ(0);
     }
     100% {
-        transform: translate(-50%, -50%) translateZ(80px);
+        transform: translateZ(80px);
     }
 }
 .center{
@@ -35,33 +65,51 @@ html,body{
     transform: translate(-50%, -50%);
 }
 .introduce{
-    font-size: 20px;
-    width: 80vw;
-    text-align: center;
+    font-size: 13px;
+    width: 200px;
+    /* text-align: center; */
+    color: #b0983e;
+    text-shadow: 0 0 30px white;
+    top: 64.8vw;
+    transform: translateX(-50%);
 }
 .introClear{
-    animation: 3s disappear forwards;
+    animation: 2.5s disappear linear forwards;
 }
 @keyframes disappear{
     0% {  
         z-index: 0;
         opacity: 1;
+        transform: translateX(-50%) translateZ(0);
+    }
+    80%{
+        z-index: 0;
+        opacity: 1;
+        transform: translateX(-50%) translateZ(50);
     }
     100% {
         z-index: -1;
         opacity: 0;
+        transform: translateX(-50%) translateZ(80px);
     }
 }
-.continueBtn{
+#continueBtn{
     position: absolute;
-    left: 50vw;
-    top: 90vh;
-    color: purple;
-    font-size: 20px;
+    left: 50%;
+    top: 122.9vw;
+    color: #ccaf45;
+    font-size: 15px;
+    width: 103px;
+    height: 10.4vw;
+    border: solid 2px #ccaf45;
+    border-radius: 5px;
+    box-shadow: 0 0 1px 0px white, 0 0 1px 0px white inset;
+    background: transparent;
+    text-shadow: 0 0 8px white;
     cursor: pointer;
     transform: translateX(-50%);
 }
-.House{
+.house{
     display: inline-block;
     position: absolute;
     z-index: -1;
@@ -116,10 +164,6 @@ html,body{
         box-shadow: inset 0 0 0 1vw white, 0 0 0vw white;
     }
 }
-/* .light:hover{
-    background-color: white;
-    opacity: 0;
-} */
 .backendLight{
     left: 10%;
     top: 65%; 
@@ -146,33 +190,93 @@ html,body{
     left: 47%;
     top: -1%;
 }
-.lightBig{
+.changeLight{
     background-color: white;
-    animation: lightBig 2s linear forwards;
+    animation: LightBig 1s linear;
 }
-@keyframes lightBig{
+@keyframes LightBig{
     0%{
+        background-color: white;
         transform: scale(1);
-        z-index: 10;
-    }
-    99%{
-        transform: scale(490);
-        z-index: -9;
     }
     100%{
+        background-color: white;
         transform: scale(500);
-        z-index: -10;
     }
 }
-.groupIntro{
+.changeProduct{
+    position: fixed;
+    left: 23%;
+    top: 10%; 
+    transform: scale(2.5);
+}
+.changeDesign{
+    position: fixed;
+    left: 130%;
+    top: 7%; 
+    animation: designBig 0.5s linear forwards;
+}
+@keyframes designBig{
+    0%{
+        transform: scale(1);
+    }
+    100%{
+        transform: scale(5);
+    }
+}
+.changeBackend{
+    position: fixed;
+    left: 325%;
+    top: 30%; 
+    animation: backendBig 0.5s linear forwards;
+}
+@keyframes backendBig{
+    0%{
+        transform: scale(1);
+    }
+    100%{
+        transform: scale(2.3);
+    }
+}
+.changeAndroid{
+    position: fixed;
+    left: 235%;
+    top: 13%; 
+    animation: androidBig 0.5s linear forwards;
+}
+@keyframes androidBig{
+    0%{
+        transform: scale(1);
+    }
+    100%{
+        transform: scale(3);
+    }
+}
+.changeFrontend{
+    position: fixed;
+    left: 425%;
+    top: 30%; 
+    animation: frontendBig 0.5s linear forwards;
+}
+@keyframes frontendBig{
+    0%{
+        transform: scale(1);
+    }
+    100%{
+        transform: scale(2);
+    }
+}
+#groupIntro{
     display: flex;
     align-items: center;
     width: 80vw;
     height: 80vh;
-    background-color:rgb(00, 00, 00, 0.3);
+    background-color:rgb(00, 00, 00, 0.5);
     font-size: 20px;
     color: white;
     text-align: center;
-    /* opacity: 0; */
+}
+.none{
+    display: none;
 }
   

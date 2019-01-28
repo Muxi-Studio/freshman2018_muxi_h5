@@ -2,14 +2,13 @@ const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
+module.exports = (env, argv) => ({
   entry:{
     move: './src/move.js',
-    load: './src/load.js'
   },
   output: {
       path: path.resolve(__dirname, './dist'),
-      publicPath: '../',
+      publicPath: argv.mode === 'production' ? "../" : "/",
       filename: 'js/[name].js'
   },
 
@@ -22,6 +21,16 @@ module.exports = {
             use: 'css-loader',
             publicPath: '../',
         })    
+      },
+
+      {
+        test: /\.(mp(3|4))$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: 'media/[name].[ext]',
+          }
+        }
       },
 
       {
@@ -43,7 +52,7 @@ module.exports = {
           loader: 'html-loader',
           options: {
             minimize: true,
-            attrs: ['img:src']
+            attrs: ['img:src', 'audio:src', 'video:src']
           }
         }
       }
@@ -63,14 +72,6 @@ module.exports = {
       hash:true,//加入版本号
       chunks:['move'],
     }),
-
-    new HtmlWebpackPlugin({
-      template:'./load.html',
-      filename:'index.html',
-      inject:true,
-      hash:true,
-      chunks:['load'],
-    })
   ],
 
   //本地服务器配置
@@ -85,4 +86,4 @@ module.exports = {
   performance: {
     hints: false
   }
-}
+})

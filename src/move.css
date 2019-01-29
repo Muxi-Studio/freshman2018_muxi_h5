@@ -19,11 +19,12 @@ html,body{
     z-index: -1;
 }
 #audioBtn{
-    position: absolute;
+    position: fixed;
     left: 330px;
     top: 5vw;
     width: 39px;
     height: 39px;
+    z-index: 10;
 }
 .audioRotate{
     animation: 3s audioRotating linear infinite;
@@ -144,127 +145,174 @@ html,body{
     height: 5vw;
     border-radius: 50%;
     cursor: pointer;
-    animation: lightShine 2s linear infinite;
-    transition: background-color 0.1s linear, opacity 0.1s linear 0.1s;
+    box-shadow: 0 0 5px white inset;
+    z-index: 1;
 }
-@keyframes lightShine{
-    0%{
-        box-shadow: inset 0 0 0 1vw white, 0 0 0vw white;
-    }
-    25%{
-        box-shadow: inset 0 0 0 1vw white, 0 0 5vw white;
-    }
-    50%{
-        box-shadow: inset 0 0 0 1vw white, 0 0 10vw white;
-    }
-    75%{
-        box-shadow: inset 0 0 0 1vw white, 0 0 5vw white;
-    }
-    100%{
-        box-shadow: inset 0 0 0 1vw white, 0 0 0vw white;
-    }
-}
-.backendLight{
+
+#backendLight{
     left: 10%;
     top: 65%; 
+    z-index: 2;
 }
-.androidLight{
+#backendDoor{
+    position: absolute;
+    top: 44%;
+    left: 8.4%;
+    width: 24%;
+    height: 36.3%;
+    z-index: 1;
+}
+#backendWindow{
+    position: absolute;
+    top: 44.8%;
+    left: 34%;
+    width: 49.2%;
+    height: 25%;
+    z-index: -1;
+}
+#backendIndoor{
+    position: absolute;
+    top: 44.8%;
+    left: 34%;
+    width: 49.2%;
+    height: 25%;
+    z-index: -2;
+}
+#androidLight{
     width: 3vw;
     height: 3vw;
     left: 83%;
-    top: 91%; 
+    top: 91%;
+    z-index: 1; 
 }
-.designLight{
+.androidWindow{
+    position: absolute;
+    left: 15%;
+    top: 63%;
+    width: 33.5%;
+    height: 26%;
+    z-index: -1;
+}
+#androidIndoor{
+    z-index: -2;
+}
+#designLight{
     left: 38%;
     top: 74%; 
+    z-index: 1;
 }
-.frontendLight{
+#designDoor{
+    position: absolute;
+    left: 33.9%;
+    top: 37.9%;
+    width: 32.3%;
+    height: 57.7%;
+    z-index: 1;
+}
+#designCat{
+    position: absolute;
+    left: 32%;
+    top: 85%;
+    width: 40%;
+    height: 45%;
+}
+.designCatNestMask{
+    position: absolute;
+    left: 72.9%;
+    top: 80%;
+    width: 14.9%;
+    height: 16.2%;
+    z-index: 1;
+    overflow: hidden;
+}
+#frontendLight{
     width: 4vw;
     height: 4vw;
     left: 33%;
     top: 80%; 
+    z-index: 1;
 }
-.productLight{
-    width: 2vw;
-    height: 2vw;
-    left: 47%;
-    top: -1%;
+#frontendIndoor{
+    position: absolute;
+    left: 57.8%;
+    top: 33.5%;
+    width: 32%;
+    height: 62%;
+    z-index: -2;
 }
-.changeLight{
-    background-color: white;
-    animation: LightBig 1s linear;
+.belowMask{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
 }
-@keyframes LightBig{
-    0%{
-        background-color: white;
-        transform: scale(1);
-    }
-    100%{
-        background-color: white;
-        transform: scale(500);
-    }
+.frontWindow1Mask{
+    position: absolute;
+    left: 58%;
+    top: 65%;
+    width: 32%;
+    height: 31%;
+    overflow: hidden;
 }
-.changeProduct{
-    position: fixed;
-    left: 23%;
-    top: 10%; 
-    transform: scale(2.5);
+.frontWindow2Mask{
+    position: absolute;
+    left: 57%;
+    top: 34%;
+    width: 33%;
+    height: 19%;
+    overflow: hidden;
 }
-.changeDesign{
-    position: fixed;
-    left: 130%;
-    top: 7%; 
-    animation: designBig 0.5s linear forwards;
+#productLight{
+    width: 3vw;
+    height: 3vw;
+    left: 48%;
+    top: -2%;
+    z-index: 1;
 }
-@keyframes designBig{
-    0%{
-        transform: scale(1);
-    }
-    100%{
-        transform: scale(5);
-    }
+#productIndoor{
+    position: absolute;
+    left: 13%;
+    top: 70%;
+    width: 76%;
+    height: 25%;
+    z-index: -2;
 }
-.changeBackend{
-    position: fixed;
-    left: 325%;
-    top: 30%; 
-    animation: backendBig 0.5s linear forwards;
+#productWindow{
+    position: absolute;
+    left: 0;
+    top: 79.4%;
+    width: 100%;
+    height: 12%;
+    z-index: -1;
 }
-@keyframes backendBig{
-    0%{
-        transform: scale(1);
-    }
-    100%{
-        transform: scale(2.3);
-    }
+.productWindow-1{
+    position: absolute;
+    left: 13%;
+    top: 0;
+    width: 10.5%;
+    height: 100%;
 }
-.changeAndroid{
-    position: fixed;
-    left: 235%;
-    top: 13%; 
-    animation: androidBig 0.5s linear forwards;
+.productWindow-2{
+    position: absolute;
+    left: 25.3%;
+    top: 0;
+    width: 12%;
+    height: 100%;
 }
-@keyframes androidBig{
-    0%{
-        transform: scale(1);
-    }
-    100%{
-        transform: scale(3);
-    }
+.productWindow-3{
+    position: absolute;
+    left: 64.6%;
+    top: 0;
+    width: 11.7%;
+    height: 98%;
 }
-.changeFrontend{
-    position: fixed;
-    left: 425%;
-    top: 30%; 
-    animation: frontendBig 0.5s linear forwards;
-}
-@keyframes frontendBig{
-    0%{
-        transform: scale(1);
-    }
-    100%{
-        transform: scale(2);
-    }
+.productWindow-4{
+    position: absolute;
+    left: 78.4%;
+    top: 0;
+    width: 10%;
+    height: 97%;
 }
 #groupIntro{
     display: flex;
@@ -279,4 +327,47 @@ html,body{
 .none{
     display: none;
 }
-  
+.openWindow{
+    animation: 1s openTheWindow linear forwards;
+}
+@keyframes openTheWindow{
+    0% {  
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-100%);
+    }
+}
+.closeWindow{
+    animation: 1s closeTheWindow linear forwards;
+}
+@keyframes closeTheWindow{
+    0% {  
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+.openDoor{
+    animation: 1s openTheDoor linear forwards;
+}
+@keyframes openTheDoor{
+    0% {  
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+.closeDoor{
+    animation: 1s closeTheDoor linear forwards;
+}
+@keyframes closeTheDoor{
+    0% {  
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}

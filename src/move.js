@@ -2,14 +2,21 @@
 import './move.css';
 
 //正则匹配，获取偏移
-const movePatt = new RegExp(/translate\((-?\d+)(?:px)/,"i");
-const groupIntroduce = {
-    productLight: "做产品这部大戏里的导演+编剧，把控产品方向，跟进产品开发和后续迭代，凭借对互联网领域的敏锐感，用灵感和理性为用户需求创造产品<br/><br/>技能：xmind，Axure，墨刀",
-    designLight:  "Adobe公司的忠实用户，用专业的技术支持和天马行空的想象力将互联网产品变成一场视觉盛宴。<br/><br/>技能：PS，AI，AE",
-    backendLight: "面对海量的数据冷静分析处理的逻辑界领袖，致力于解决服务器运维中的各种难题。<br/><br/>技能：Python，Go",
-    androidLight: "基于android系统的搞事情小分队，开发App，做自己的App Store。<br/><br/>技能：Java，Kotlin",    
-    frontendLight:"浏览器里神奇的画笔，用代码实现良好的网页和丰富的交互方式。<br/><br/>技能：HTML，CSS，JavaScript",    
-}
+const movePatt = new RegExp(/translateX\((-?(?:\d+(?:\.\d+)?))(?:px)\)/, "i");
+const groupIntroduce = new Map([
+    ['productLight' , "做产品这部大戏里的导演+编剧，把控产品方向，跟进产品开发和后续迭代，凭借对互联网领域的敏锐感，用灵感和理性为用户需求创造产品<br/><br/>技能：xmind，Axure，墨刀"],
+    ['designLight'  ,  "Adobe公司的忠实用户，用专业的技术支持和天马行空的想象力将互联网产品变成一场视觉盛宴。<br/><br/>技能：PS，AI，AE"],
+    ['backendLight' , "面对海量的数据冷静分析处理的逻辑界领袖，致力于解决服务器运维中的各种难题。<br/><br/>技能：Python，Go"],
+    ['androidLight' , "基于android系统的搞事情小分队，开发App，做自己的App Store。<br/><br/>技能：Java，Kotlin"],    
+    ['frontendLight', "浏览器里神奇的画笔，用代码实现良好的网页和丰富的交互方式。<br/><br/>技能：HTML，CSS，JavaScript"],    
+]);
+const logoMove = new Map([
+    ['productLogo' , 0],
+    ['designLogo'  , -0.981],
+    ['backendLogo' , -3],
+    ['androidLogo' , -1.992],
+    ['frontendLogo', -4.115],
+]);
 
 let moveImage, moveWidth;
 let productWindow, backendDoor, backendWindow, androidWindow, designDoor, designCat, frontendWindow1, frontendWindow2;
@@ -27,10 +34,11 @@ window.onload = () => {
           loadingImg = document.getElementById('loadingImg'),
           audioBtn = document.getElementById('audioBtn'),
           audioPlay = document.getElementById('audioPlay'),
-          contain = document.getElementById('contain'),
           lights = document.getElementsByClassName('light'),
           groupIntro = document.getElementById('groupIntro'),
-          intro = document.getElementsByClassName('introduce')[0];
+          intro = document.getElementsByClassName('introduce')[0],
+          leadTowardsRight = document.getElementById('leadTowardsRight'),
+          groupLogo = document.getElementsByClassName('groupLogo');
     moveImage = document.getElementById('contain');
     productWindow = document.getElementById("productWindow");
     backendDoor = document.getElementById("backendDoor");
@@ -56,14 +64,13 @@ window.onload = () => {
                     // src = src.slice(0, index1) + '2' + src.slice(index1);
                     // light.previousElementSibling.src = src;
                     dealLight(light, groupIntro, obj);
-                    console.log(1)
                 }
                 else{
                     // if(src[index1 - 1] === '2')
                     //     src = src.slice(0, index1 - 1) + src.slice(index1);
                     
                     // light.previousElementSibling.src = src;
-                    recoverLight(light);console.log(2)
+                    recoverLight(light);
                     // groupIntro.style.zIndex = 1;
                 }
             })
@@ -78,8 +85,16 @@ window.onload = () => {
         setTimeout(() => {
             loadingImg.classList.add('none');
             image.classList.remove('none');
-            moveImage.style.transform = "translate(0, 0)";
-            moveImage.style.webkitTransform = "translate(0, 0)";
+            moveImage.style.transform = "translateX(0)";
+            moveImage.style.webkitTransform = "translateX(0)";
+            leadTowardsRight.style.zIndex = 1;
+
+            for(let logo of groupLogo){
+                logo.style.zIndex = 1;
+                logo.onclick = () => {
+                    moveImage.style.transform = "translateX(" + logoMove.get(logo.id) * window.innerWidth  + "px)";
+                }
+            }
             
             moveWidth = image.width - window.innerWidth;
             document.addEventListener('touchstart', touchStart, {passive: false});
@@ -100,7 +115,7 @@ window.onload = () => {
 
 function dealLight(light, groupIntro, flag){
     let preClass = light.previousElementSibling.classList,
-        words = groupIntroduce[light.id];
+        words = groupIntroduce.get(light.id);
 
     light.classList.add('none');
     switch(light.id){
@@ -130,7 +145,7 @@ function dealLight(light, groupIntro, flag){
     }
 
     // setTimeout(() => {
-    //     contain.style.zIndex = 1;
+    //     moveImage.style.zIndex = 1;
     //     dealIntroduceAnimate(words, groupIntro, flag);
     // }, 500);
 }
@@ -254,11 +269,10 @@ function touchMove(event){
 
     window.requestAnimationFrame(()=>{
         currentY = finger.pageY;
-
         let moveY = preY - currentY,
             moveImageX = moveImage.style.transform.match(movePatt)[1],
             trans;
-        if((moveY < 0 && parseInt(moveImageX) === 0) || (moveY > 0 && (-parseInt(moveImageX) >= moveWidth)))
+        if((moveY < 0 && parseInt(moveImageX) === 0) || (moveY > 0 && (-parseFloat(moveImageX) >= moveWidth)))
             return false;
         preY = currentY;
 
@@ -269,10 +283,10 @@ function touchMove(event){
             trans = -moveWidth;
 
         else
-            trans = parseInt(moveImageX - moveY);
+            trans = parseFloat(moveImageX - moveY);
 
-        moveImage.style.transform = "translate(" + trans + "px, 0)";
-        moveImage.style.webkitTransform = "translate(" + trans + "px, 0)";
+        moveImage.style.transform = "translateX(" + trans + "px)";
+        moveImage.style.webkitTransform = "translateX(" + trans + "px)";
     })
 
     event.preventDefault();

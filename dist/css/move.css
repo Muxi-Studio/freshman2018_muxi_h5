@@ -371,3 +371,32 @@ html,body{
         transform: translateX(0);
     }
 }
+#leadTowardsRight{
+    position: fixed;
+    left: 88%;
+    top: 45%;
+    width: 6%;
+    height: 13vw;
+}
+#productLogo{
+    left: 10%;
+}
+#designLogo{
+    left: 27.5%;
+}
+#androidLogo{
+    left: 45%;
+}
+#backendLogo{
+    left: 62.5%;
+}
+#frontendLogo{
+    left: 80%;
+}
+.groupLogo{
+    position: fixed;
+    top: 12%;
+    left: 0;
+    width: 10.5%;
+    height: 10vw;
+}

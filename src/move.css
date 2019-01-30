@@ -3,8 +3,12 @@
     margin: 0;
     padding: 0
 }
+*::-webkit-scrollbar{
+    width:0;
+    height: 0;
+}
 html,body{
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     overflow: hidden;
     position: fixed;
@@ -21,10 +25,11 @@ html,body{
 #audioBtn{
     position: fixed;
     left: 330px;
-    top: 5vw;
+    top: 2vh;
     width: 39px;
     height: 39px;
-    z-index: 10;
+    z-index: 1;
+    cursor: pointer;
 }
 .audioRotate{
     animation: 3s audioRotating linear infinite;
@@ -65,13 +70,13 @@ html,body{
     top: 50%;
     transform: translate(-50%, -50%);
 }
-.introduce{
+#teamIntroduce{
     font-size: 13px;
     width: 200px;
     /* text-align: center; */
     color: #b0983e;
     text-shadow: 0 0 30px white;
-    top: 64.8vw;
+    top: 36.4vh;
     transform: translateX(-50%);
 }
 .introClear{
@@ -97,7 +102,7 @@ html,body{
 #continueBtn{
     position: absolute;
     left: 50%;
-    top: 122.9vw;
+    top: 69.1vh;
     color: #ccaf45;
     font-size: 15px;
     width: 103px;
@@ -117,27 +122,27 @@ html,body{
     font-size: 0;
 }
 .frontendHouse{
-    left: 435vw;
+    left: 244.6vh;
     top: 42vh; 
 }
 .backendHouse{
-    left: 330vw;
+    left: 185.5vh;
     top: 49vh;
 }
 .androidHouse{
-    left: 220vw;
+    left: 123.7vh;
     top: 40vh;
 }
 .designHouse{
-    left: 120vw;
+    left: 67.5vh;
     top: 50vh;
 }
 .productHouse{
-    left: 20vw;
+    left: 11.2vh;
     top: 36vh; 
 }
 .houseSize{
-    width: 60vw;
+    width: 35vh;
 }
 .light{
     position: absolute;
@@ -266,7 +271,7 @@ html,body{
 #productLight{
     width: 3vw;
     height: 3vw;
-    left: 48%;
+    left: 48.5%;
     top: -2%;
     z-index: 1;
 }
@@ -314,15 +319,50 @@ html,body{
     width: 10%;
     height: 97%;
 }
-#groupIntro{
-    display: flex;
-    align-items: center;
-    width: 80vw;
-    height: 80vh;
-    background-color:rgb(00, 00, 00, 0.5);
-    font-size: 20px;
-    color: white;
+#groupIntroNotice{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: -1;
+}
+.groupIntroNotice{
+    width: 75%;
+    height: 67.5vh;
+}
+#cancelNotice{
+    position: absolute;
+    left: 82%;
+    top: 15%;
+    width: 5%;
+    height: 5%;
+    font-size: 25px;
+    color: #eeddb0;
+}
+#groupIntroduce{
+    position: absolute;
+    left: 18%;
+    top: 25%;
+    width: 64%;
+    height: 53%;
+}
+#groupIntroduceContain{
+    width: 100%;
+    height: 100%;
+    /* text-align: center; */
+    color: #c8b4aa;
+    font-size: 19px;
+    font-weight: 300;	
+    overflow: scroll;
+}
+#groupName{
+    width: 100%;
+    font-size: 25px;
+    font-weight: normal;
     text-align: center;
+    margin-bottom: 10px;
 }
 .none{
     display: none;
@@ -377,6 +417,7 @@ html,body{
     top: 45%;
     width: 6%;
     height: 13vw;
+    cursor: pointer;
 }
 #productLogo{
     left: 10%;
@@ -393,10 +434,27 @@ html,body{
 #frontendLogo{
     left: 80%;
 }
-.groupLogo{
+#groupLogo{
     position: fixed;
     top: 12%;
     left: 0;
-    width: 10.5%;
+    width: 100%;
     height: 10vw;
+}
+.groupLogo{
+    position: absolute;
+    top: 0;
+    width: 10.5%;
+    cursor: pointer;
+}
+.transform1{
+    animation: 1s transform2 linear forwards;
+}
+@keyframes transform2{
+    0% {  
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
 }

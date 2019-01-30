@@ -1,44 +1,62 @@
 'use strict';
+//引入、打包文件
 import './move.css';
+import frontendLight from "../static/frontendLight.png";
+import androidLight from "../static/androidLight.png";
+import backendLight from "../static/backendLight.png";
+import designLight from "../static/designLight.png";
+import productLight from "../static/productLight.png";
 
 //正则匹配，获取偏移
 const movePatt = new RegExp(/translateX\((-?(?:\d+(?:\.\d+)?))(?:px)\)/, "i");
+//组介绍信息
 const groupIntroduce = new Map([
-    ['productLight' , "做产品这部大戏里的导演+编剧，把控产品方向，跟进产品开发和后续迭代，凭借对互联网领域的敏锐感，用灵感和理性为用户需求创造产品<br/><br/>技能：xmind，Axure，墨刀"],
-    ['designLight'  ,  "Adobe公司的忠实用户，用专业的技术支持和天马行空的想象力将互联网产品变成一场视觉盛宴。<br/><br/>技能：PS，AI，AE"],
-    ['backendLight' , "面对海量的数据冷静分析处理的逻辑界领袖，致力于解决服务器运维中的各种难题。<br/><br/>技能：Python，Go"],
-    ['androidLight' , "基于android系统的搞事情小分队，开发App，做自己的App Store。<br/><br/>技能：Java，Kotlin"],    
-    ['frontendLight', "浏览器里神奇的画笔，用代码实现良好的网页和丰富的交互方式。<br/><br/>技能：HTML，CSS，JavaScript"],    
+    ['productLight' , {name: "产品组", introduceContent: "做产品这部大戏里的导演+编剧，把控产品方向，跟进产品开发和后续迭代，凭借对互联网领域的敏锐感，用灵感和理性为用户需求创造产品<br/><br/>技能：xmind，Axure，墨刀"}],
+    ['designLight'  , {name: "设计组", introduceContent: "Adobe公司的忠实用户，用专业的技术支持和天马行空的想象力将互联网产品变成一场视觉盛宴。<br/><br/>技能：PS，AI，AE"}],
+    ['backendLight' , {name: "后端组", introduceContent: "面对海量的数据冷静分析处理的逻辑界领袖，致力于解决服务器运维中的各种难题。<br/><br/>技能：Python，Go"}],
+    ['androidLight' , {name: "安卓组", introduceContent: "基于android系统的搞事情小分队，开发App，做自己的App Store。<br/><br/>技能：Java，Kotlin"}],    
+    ['frontendLight', {name: "前端组", introduceContent: "浏览器里神奇的画笔，用代码实现良好的网页和丰富的交互方式。<br/><br/>技能：HTML，CSS，JavaScript"}],    
 ]);
-const logoMove = new Map([
-    ['productLogo' , 0],
-    ['designLogo'  , -0.981],
-    ['backendLogo' , -3],
-    ['androidLogo' , -1.992],
-    ['frontendLogo', -4.115],
+//logo信息
+const logoInfo = new Map([
+    ['productLogo' , {moveDistance: -0.024, imgPath: productLight}],
+    ['designLogo'  , {moveDistance: -0.588, imgPath: designLight}],
+    ['backendLogo' , {moveDistance: -1.750, imgPath: backendLight}],
+    ['androidLogo' , {moveDistance: -1.153, imgPath: androidLight}],
+    ['frontendLogo', {moveDistance: -2.358, imgPath: frontendLight}],
 ]);
+//每次点击移动提示光标的移动距离
+const movePerStep = 0.28;
 
+//存储背景图片以及最大移动距离
 let moveImage, moveWidth;
-let productWindow, backendDoor, backendWindow, androidWindow, designDoor, designCat, frontendWindow1, frontendWindow2;
+//存储dom节点
+let groupIntroNotice, groupIntroContent, groupName, cancelNotice, productWindow, backendDoor, backendWindow, androidWindow, designDoor, designCat, frontendWindow1, frontendWindow2, windowSlide;
 
 //手指触点位置
 let preY, currentY;
 
 window.onload = () => {
+    //设备识别
     if(!quit()){
         return;
     }
 
+    //获取dom，方便频繁操作
     const continueBtn = document.getElementById('continueBtn'),
           image = document.getElementById('backgroundImg'),
           loadingImg = document.getElementById('loadingImg'),
           audioBtn = document.getElementById('audioBtn'),
           audioPlay = document.getElementById('audioPlay'),
           lights = document.getElementsByClassName('light'),
-          groupIntro = document.getElementById('groupIntro'),
-          intro = document.getElementsByClassName('introduce')[0],
+          intro = document.getElementById('teamIntroduce'),
           leadTowardsRight = document.getElementById('leadTowardsRight'),
-          groupLogo = document.getElementsByClassName('groupLogo');
+          groupLogos = document.getElementsByClassName('groupLogo'),
+          groupLogoDiv = document.getElementById('groupLogo');
+    groupIntroNotice = document.getElementById('groupIntroNotice');
+    groupIntroContent = document.getElementById('groupIntroContent');
+    groupName = document.getElementById('groupName');
+    cancelNotice = document.getElementById('cancelNotice');
     moveImage = document.getElementById('contain');
     productWindow = document.getElementById("productWindow");
     backendDoor = document.getElementById("backendDoor");
@@ -46,37 +64,13 @@ window.onload = () => {
     androidWindow = document.getElementById("androidWindow");
     designDoor = document.getElementById("designDoor");
     designCat = document.getElementById("designCat");
+    designCatNest = document.getElementById("designCatNest");
     frontendWindow1 = document.getElementById("frontendWindow1");
     frontendWindow2 = document.getElementById("frontendWindow2");
+    windowSlide = document.getElementById("windowSlide");
 
-    for(let light of lights){
-        //标记异步，及时清除，防止累积
-        let obj = {flag: 0};
-        light.onclick = () => {
-            document.addEventListener('click',(e) => {
-                if(obj.flag){
-                    clearTimeout(obj.flag);
-                }
 
-                if(e.target === light){
-                    // if(src[index1 - 1] === '2')
-                    //     return;
-                    // src = src.slice(0, index1) + '2' + src.slice(index1);
-                    // light.previousElementSibling.src = src;
-                    dealLight(light, groupIntro, obj);
-                }
-                else{
-                    // if(src[index1 - 1] === '2')
-                    //     src = src.slice(0, index1 - 1) + src.slice(index1);
-                    
-                    // light.previousElementSibling.src = src;
-                    recoverLight(light);
-                    // groupIntro.style.zIndex = 1;
-                }
-            })
-        }
-    }
-
+    //点击按钮，更换场景，监听dom
     continueBtn.onclick = () => {
         loadingImg.classList.add('perspect');
         intro.classList.add('introClear');
@@ -86,21 +80,34 @@ window.onload = () => {
             loadingImg.classList.add('none');
             image.classList.remove('none');
             moveImage.style.transform = "translateX(0)";
-            moveImage.style.webkitTransform = "translateX(0)";
             leadTowardsRight.style.zIndex = 1;
+            groupLogoDiv.style.zIndex = 1;
+            moveWidth = image.width - window.innerWidth;
 
-            for(let logo of groupLogo){
-                logo.style.zIndex = 1;
-                logo.onclick = () => {
-                    moveImage.style.transform = "translateX(" + logoMove.get(logo.id) * window.innerWidth  + "px)";
-                }
+            //监听圆环点击事件
+            for(let light of lights){
+                clickLight(light);
+            }
+
+            designCatNest.onclick = () => {
+                designCatNest.classList.add('transform1');
             }
             
-            moveWidth = image.width - window.innerWidth;
+            //监听各种移动事件
+            for(let logo of groupLogos){
+                logo.onclick = () => {
+                    logo.src = logoInfo.get(logo.id).imgPath;
+                    moveImage.style.transform = "translateX(" + logoInfo.get(logo.id).moveDistance * window.innerHeight  + "px)";
+                }
+            }
+            leadTowardsRight.onclick = () => {
+                backgroundImageMove(movePerStep * window.innerHeight);
+            }
             document.addEventListener('touchstart', touchStart, {passive: false});
         }, 3000);
     }
 
+    //播放音乐
     audioBtn.onclick = () => { 
         if(audioPlay.paused){
             audioPlay.play();
@@ -113,49 +120,89 @@ window.onload = () => {
     }
 }
 
-function dealLight(light, groupIntro, flag){
-    let preClass = light.previousElementSibling.classList,
-        words = groupIntroduce.get(light.id);
+//监听圆环点击事件
+function clickLight(light){
+    //标记、节流
+    let flag = false,
+        clearTimeFlag = {flag: undefined};
+    light.onclick = () => {
+        document.addEventListener('click',(e) => {
+            if(flag){
+                return;
+            }
+
+            if(e.target === light){
+                dealLight(light, clearTimeFlag);
+                //动画未执行完毕，再次点击会直接执行else内的相反动画，进行标记节流
+                flag = true;
+                setTimeout(() => {
+                    flag = false;
+                }, 1000);
+            }
+            else if(e.target === cancelNotice){
+                if(light.classList.contains('none')){
+                    recoverLight(light, clearTimeFlag.flag);
+                    //动画执行完毕，light才会清除none，进行标记节流
+                    flag = true;
+                    setTimeout(() => {
+                        flag = false;
+                    }, 1000);
+                }
+            }
+        })
+    }
+}
+
+//处理圆环点击事件，执行相关动画
+function dealLight(light, clearTimeFlag){
+    let groupInfo = groupIntroduce.get(light.id);
 
     light.classList.add('none');
     switch(light.id){
         case 'productLight': {
             productWindow.classList.add("openWindow");
+            windowSlide.play();
             break;
         };
         case 'backendLight': {
             backendDoor.classList.add("openDoor");
             backendWindow.classList.add("openWindow");
+            windowSlide.play();
             break;
         };
         case 'androidLight': {
             androidWindow.classList.add("openWindow");
+            windowSlide.play();
             break;
         };
         case 'designLight': {
             designDoor.classList.add("openDoor");
             designCat.classList.add("openWindow");
+            windowSlide.play();
             break;
         };
         case 'frontendLight': {
             frontendWindow1.classList.add("openWindow");
             frontendWindow2.classList.add("openWindow");
+            windowSlide.play();
             break;
         };
     }
 
-    // setTimeout(() => {
-    //     moveImage.style.zIndex = 1;
-    //     dealIntroduceAnimate(words, groupIntro, flag);
-    // }, 500);
+    setTimeout(() => {
+        dealIntroduceAnimate(groupInfo.name, groupInfo.introduceContent, clearTimeFlag);
+    }, 1200);
 }
 
-function recoverLight(light){
-    let preClass = light.previousElementSibling.classList;
+//恢复圆环，执行相关动画
+function recoverLight(light, timeFlag){
+    groupIntroNotice.style.zIndex = -1;
+    clearTimeout(timeFlag);
 
     switch(light.id){
         case 'productLight': {
             productWindow.classList.add("closeWindow");
+            windowSlide.play();
             setTimeout(() => {
                 productWindow.classList.remove("openWindow");
                 productWindow.classList.remove("closeWindow");
@@ -165,6 +212,7 @@ function recoverLight(light){
         case 'backendLight': {
             backendDoor.classList.add("closeDoor");
             backendWindow.classList.add("closeWindow");
+            windowSlide.play();
             setTimeout(() => {
                 backendDoor.classList.remove("openDoor");
                 backendDoor.classList.remove("closeDoor");
@@ -175,6 +223,7 @@ function recoverLight(light){
         };
         case 'androidLight': {
             androidWindow.classList.add("closeWindow");
+            windowSlide.play();
             setTimeout(() => {
                 androidWindow.classList.remove("openWindow");
                 androidWindow.classList.remove("closeWindow");
@@ -184,6 +233,7 @@ function recoverLight(light){
         case 'designLight': {
             designDoor.classList.add("closeDoor");
             designCat.classList.add("closeWindow");
+            windowSlide.play();
             setTimeout(() => {
                 designDoor.classList.remove("openDoor");
                 designDoor.classList.remove("closeDoor");
@@ -195,6 +245,7 @@ function recoverLight(light){
         case 'frontendLight': {
             frontendWindow1.classList.add("closeWindow");
             frontendWindow2.classList.add("closeWindow");
+            windowSlide.play();
             setTimeout(() => {
                 frontendWindow1.classList.remove("openWindow");
                 frontendWindow1.classList.remove("closeWindow");
@@ -204,33 +255,69 @@ function recoverLight(light){
             break;
         };
     }
+
     setTimeout(() => {
         light.classList.remove('none');
     }, 1000);
 }
 
-function dealIntroduceAnimate(words, groupIntro, flag){
-    groupIntro.style.zIndex = 10;
-    let node = groupIntro.childNodes[0],
-        i = 0;
+/*处理组别介绍的相关动画
+ *@method dealIntroduceAnimate
+ *@for window
+ *@param{string} name：组别名称，introduceContent：组别介绍，clearTimeFlag：标记对象，当recoverLight函数被调用时，清除计时器
+ *@return{null} 
+*/
+function dealIntroduceAnimate(name, introduceContent, clearTimeFlag){
+    groupIntroNotice.style.zIndex = 2;
+    let i = 0;
+
+    groupName.innerHTML = name;
+    write();
 
     function write(){
-        let string = words.substr(0,i); 
-        if(i > words.length){
+        let string = introduceContent.substr(0,i); 
+        if(i > introduceContent.length){
             return;
         }
-        else if(i === words.length){
-            node.innerHTML = string;
+        else if(i === introduceContent.length){
+            groupIntroContent.innerHTML = string;
         }
         else{
-            node.innerHTML = string + "_";
+            groupIntroContent.innerHTML = string + "_";
         }
         i++;
-        flag.flag = setTimeout(write, 150);
+        clearTimeFlag.flag = setTimeout(write, 150);
     }
-    write();
 }
 
+/*处理背景图片的移动
+ *@method backgroundImageMove
+ *@for window
+ *@param{int} distance 正->向右，负->向左
+ *@return{null}
+*/
+function backgroundImageMove(distance){
+    let moveImageX = parseFloat(moveImage.style.transform.match(movePatt)[1]),
+        trans;
+    if((distance < 0 && (moveImageX >= 0)) || (distance > 0 && (-moveImageX >= moveWidth)))
+        return;
+
+    if(moveImageX - distance > 0){
+        trans = 0;
+    }
+
+    else if(!(distance - moveImageX < moveWidth)){
+        trans = -moveWidth;
+    }
+
+    else{
+        trans = moveImageX - distance;
+    }
+
+    moveImage.style.transform = "translateX(" + trans + "px)";
+}
+
+//进行设备识别处理
 function quit(){
     let equipmentRe = /(Android|webOS|iPhone(X)?|iPod|BlackBerry)/i;
     if(!equipmentRe.test(navigator.userAgent)){
@@ -244,6 +331,7 @@ function quit(){
     return true;
 }
 
+//处理触摸事件，进行移动
 function touchStart(event){
     /* 禁止浏览器缩放 */
     if(event.touches[1]){
@@ -267,26 +355,10 @@ function touchMove(event){
 
     let finger = event.touches[0];
 
-    window.requestAnimationFrame(()=>{
+    window.requestAnimationFrame(() => {
         currentY = finger.pageY;
-        let moveY = preY - currentY,
-            moveImageX = moveImage.style.transform.match(movePatt)[1],
-            trans;
-        if((moveY < 0 && parseInt(moveImageX) === 0) || (moveY > 0 && (-parseFloat(moveImageX) >= moveWidth)))
-            return false;
+        backgroundImageMove(preY - currentY);
         preY = currentY;
-
-        if(moveImageX - moveY > 0)
-            trans = 0;
-
-        else if(!(moveY - moveImageX < moveWidth))
-            trans = -moveWidth;
-
-        else
-            trans = parseFloat(moveImageX - moveY);
-
-        moveImage.style.transform = "translateX(" + trans + "px)";
-        moveImage.style.webkitTransform = "translateX(" + trans + "px)";
     })
 
     event.preventDefault();

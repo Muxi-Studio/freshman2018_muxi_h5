@@ -67,7 +67,7 @@ module.exports = (env, argv) => ({
     //对html模板进行处理，生成对应的html,引入需要的资源模块
     new HtmlWebpackPlugin({
       template:'./move.html',//模板文件
-      filename:'move.html',//目标文件
+      filename:'index.html',//目标文件
       inject:true,//资源加入到底部
       hash:true,//加入版本号
       chunks:['move'],

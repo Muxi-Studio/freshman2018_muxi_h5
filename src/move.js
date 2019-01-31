@@ -31,7 +31,7 @@ const movePerStep = 0.28;
 //存储背景图片以及最大移动距离
 let moveImage, moveWidth;
 //存储dom节点
-let groupIntroNotice, groupIntroContent, groupName, cancelNotice, productWindow, backendDoor, backendWindow, androidWindow, designDoor, designCat, frontendWindow1, frontendWindow2, windowSlide;
+let groupIntroNotice, groupIntroContent, groupName, cancelNotice, productWindow, backendDoor, backendWindow, androidWindow, designDoor, designCat, designCatNest, frontendWindow1, frontendWindow2, windowSlide;
 
 //手指触点位置
 let preY, currentY;

@@ -31,7 +31,7 @@ const movePerStep = 0.28;
 //存储背景图片以及最大移动距离
 let moveImage, moveWidth;
 //存储dom节点
-let groupIntroNotice, groupIntroContent, groupName, cancelNotice, productWindow, backendDoor, backendWindow, androidWindow, designDoor, designCat, designCatNest, frontendWindow1, frontendWindow2, windowSlide;
+let groupIntroNotice, groupIntroContent, groupName, cancelNotice, productWindow, backendDoor, backendWindow, androidWindow, designDoor, designCat, designCatNest, frontendWindow1, frontendWindow2, windowSlide, footerTip;
 
 //手指触点位置
 let preY, currentY;
@@ -53,6 +53,7 @@ window.onload = () => {
           leadTowardsRight = document.getElementById('leadTowardsRight'),
           groupLogos = document.getElementsByClassName('groupLogo'),
           groupLogoDiv = document.getElementById('groupLogo');
+    footerTip = document.getElementById('footerTip');
     groupIntroNotice = document.getElementById('groupIntroNotice');
     groupIntroContent = document.getElementById('groupIntroContent');
     groupName = document.getElementById('groupName');
@@ -82,6 +83,7 @@ window.onload = () => {
             moveImage.style.transform = "translateX(0)";
             leadTowardsRight.style.zIndex = 1;
             groupLogoDiv.style.zIndex = 1;
+            footerTip.style.zIndex = 1;
             moveWidth = image.width - window.innerWidth;
 
             //监听圆环点击事件
@@ -115,6 +117,7 @@ window.onload = () => {
         }
         else{
             audioPlay.pause();
+            audioPlay.currentTime = 0;
             audioBtn.classList.remove('audioRotate');
         }
     }
@@ -286,7 +289,7 @@ function dealIntroduceAnimate(name, introduceContent, clearTimeFlag){
             groupIntroContent.innerHTML = string + "_";
         }
         i++;
-        clearTimeFlag.flag = setTimeout(write, 150);
+        clearTimeFlag.flag = setTimeout(write, 100);
     }
 }
 
@@ -308,9 +311,11 @@ function backgroundImageMove(distance){
 
     else if(!(distance - moveImageX < moveWidth)){
         trans = -moveWidth;
+        footerTip.style.zIndex = 0;
     }
 
     else{
+        footerTip.style.zIndex = 1;
         trans = moveImageX - distance;
     }
 

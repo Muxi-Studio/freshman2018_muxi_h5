@@ -150,8 +150,27 @@ html,body{
     height: 5vw;
     border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0 0 5px white inset;
+    box-shadow: 0 0 10px white;
     z-index: 1;
+    background: white;
+    animation: 2s lightShadow linear infinite;
+}
+@keyframes lightShadow{
+    0% {  
+        box-shadow: 0 0 10px white;
+    }
+    25%{
+        box-shadow: 0 0 20px white;
+    }
+    50%{
+        box-shadow: 0 0 30px white;
+    }
+    75%{
+        box-shadow: 0 0 20px white;
+    }
+    100% {
+        box-shadow: 0 0 10px white;
+    }
 }
 
 #backendLight{
@@ -457,4 +476,14 @@ html,body{
     100% {
         transform: translateX(0);
     }
+}
+#footerTip{
+    position: absolute;
+    left: 0;
+    top: 95vh;
+    width: 100%;
+    text-align: center;
+    text-shadow: 0 0 15px white;
+    font-size: 20px;
+    color: white;
 }

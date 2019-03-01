@@ -1,7 +1,8 @@
 *{
     box-sizing: border-box;
     margin: 0;
-    padding: 0
+    padding: 0;
+    outline: 0;
 }
 *::-webkit-scrollbar{
     width:0;
@@ -13,6 +14,12 @@ html,body{
     overflow: hidden;
     position: fixed;
 }
+body{
+    display: none;
+}
+.maskBeforeImgOnload{
+    display: none;
+}
 #loadingImg{
     width: 100%;
     height: 100%;
@@ -21,6 +28,7 @@ html,body{
 }
 #backgroundImg{
     z-index: -1;
+    height: 100vh;
 }
 #audioBtn{
     position: fixed;
@@ -61,7 +69,7 @@ html,body{
         transform: translateZ(0);
     }
     100% {
-        transform: translateZ(80px);
+        transform: translateZ(95px);
     }
 }
 .center{
@@ -78,28 +86,58 @@ html,body{
     text-shadow: 0 0 30px white;
     top: 36.4vh;
     transform: translateX(-50%);
+    perspective: 100px;
 }
-.introClear{
-    animation: 2.5s disappear linear forwards;
+.teamIntroducePresent{
+    opacity: 0;
+    animation: 2s introducePresent 0.3s ease-out forwards;
 }
-@keyframes disappear{
+.objectClear{
+    animation: 1s clear linear forwards;
+}
+@keyframes introducePresent {
     0% {  
-        z-index: 0;
+        opacity: 0;
+        transform: translateX(-50%) translateZ(100px);
+    }
+    20%{
         opacity: 1;
-        transform: translateX(-50%) translateZ(0);
+    }
+    40%{
+        transform: translateX(-50%) translateZ(-50px);
+    }
+    70%{
+        transform: translateX(-50%) translateZ(-50px);
+    }
+    75%{
+        transform: translateX(-50%) translateY(30px) translateZ(-20px);
     }
     80%{
-        z-index: 0;
-        opacity: 1;
-        transform: translateX(-50%) translateZ(50);
+        transform: translateX(-50%) translateY(-30px) translateZ(-20px);
+    }
+    85%{
+        transform: translateX(-50%) translateY(20px) translateZ(-10px);
+    }
+    90%{
+        transform: translateX(-50%) translateY(-20px) translateZ(-10px);
+    }
+    95%{
+        transform: translateX(-50%) translateY(10px) translateZ(-5px);
     }
     100% {
-        z-index: -1;
-        opacity: 0;
-        transform: translateX(-50%) translateZ(80px);
+        opacity: 1;
+        transform: translateX(-50%) translateZ(0px);
     }
 }
-#continueBtn{
+@keyframes clear {
+    0% {  
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+.clickBtn{
     position: absolute;
     left: 50%;
     top: 69.1vh;
@@ -115,6 +153,60 @@ html,body{
     cursor: pointer;
     transform: translateX(-50%);
 }
+.continueBtnShake{
+    opacity: 0;
+    animation: 2s buttonShake 2.5s ease-out forwards;
+}
+@keyframes buttonShake{
+    0% {
+        opacity: 0;
+        top: 0;
+        transform: translateX(-50%) rotate(0);
+    }
+    15% {
+        opacity: 1;
+        top: 69.1vh;
+        transform: translateX(-50%) rotate(0);
+    }
+    30%{
+        transform: translateX(-50%) rotate(0) scaleY(0.4);
+    }
+    35%{
+        transform: translateX(-50%) rotate(0);
+    }
+    
+    65% {
+        transform: translateX(-50%) rotate(15deg);
+    }
+    75%{
+        transform: translateX(-50%) rotate(-15deg);
+    }
+    80% {
+        transform: translateX(-50%) rotate(9deg);
+    }
+    85% {
+        transform: translateX(-50%) rotate(-9deg);
+    }
+    90% {
+        transform: translateX(-50%) rotate(5deg);
+    }
+    95%{
+        transform: translateX(-50%) rotate(-5deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) rotate(0deg);
+    }
+}
+#signupBtn{
+    position: fixed;
+    top: 92vh;
+    z-index: -1;
+    box-shadow: 0 0 5px 0px yellow, 0 0 5px 0px yellow inset;
+    text-shadow: 0 0 5px yellow;
+    color: white;
+    border: solid 2px white;
+}
 .house{
     display: inline-block;
     position: absolute;
@@ -122,7 +214,7 @@ html,body{
     font-size: 0;
 }
 .frontendHouse{
-    left: 244.6vh;
+    left: 256.6vh;
     top: 42vh; 
 }
 .backendHouse{
@@ -152,7 +244,7 @@ html,body{
     cursor: pointer;
     box-shadow: 0 0 10px white;
     z-index: 1;
-    background: white;
+    background-color: white;
     animation: 2s lightShadow linear infinite;
 }
 @keyframes lightShadow{
@@ -177,6 +269,8 @@ html,body{
     left: 10%;
     top: 65%; 
     z-index: 2;
+    width: 4vw;
+    height: 4vw;
 }
 #backendDoor{
     position: absolute;
@@ -203,8 +297,8 @@ html,body{
     z-index: -2;
 }
 #androidLight{
-    width: 3vw;
-    height: 3vw;
+    width: 3.5vw;
+    height: 3.5vw;
     left: 83%;
     top: 91%;
     z-index: 1; 
@@ -224,6 +318,8 @@ html,body{
     left: 38%;
     top: 74%; 
     z-index: 1;
+    width: 4vw;
+    height: 4vw;
 }
 #designDoor{
     position: absolute;
@@ -466,10 +562,10 @@ html,body{
     width: 10.5%;
     cursor: pointer;
 }
-.transform1{
-    animation: 1s transform2 linear forwards;
+.catTransform{
+    animation: 1s catTranslate linear forwards;
 }
-@keyframes transform2{
+@keyframes catTranslate{
     0% {  
         transform: translateX(-100%);
     }
@@ -480,10 +576,10 @@ html,body{
 #footerTip{
     position: absolute;
     left: 0;
-    top: 95vh;
+    top: 93.5vh;
     width: 100%;
     text-align: center;
-    text-shadow: 0 0 15px white;
-    font-size: 20px;
+    text-shadow: 0 0 8px yellow;
+    font-size: 16px;
     color: white;
 }

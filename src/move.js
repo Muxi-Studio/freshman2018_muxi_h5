@@ -23,7 +23,7 @@ const logoInfo = new Map([
     ['designLogo'  , {moveDistance: -0.588, imgPath: designLight}],
     ['backendLogo' , {moveDistance: -1.750, imgPath: backendLight}],
     ['androidLogo' , {moveDistance: -1.153, imgPath: androidLight}],
-    ['frontendLogo', {moveDistance: -2.358, imgPath: frontendLight}],
+    ['frontendLogo', {moveDistance: -2.434, imgPath: frontendLight}],
 ]);
 //每次点击移动提示光标的移动距离
 const movePerStep = 0.28;
@@ -31,7 +31,7 @@ const movePerStep = 0.28;
 //存储背景图片以及最大移动距离
 let moveImage, moveWidth;
 //存储dom节点
-let groupIntroNotice, groupIntroContent, groupName, cancelNotice, productWindow, backendDoor, backendWindow, androidWindow, designDoor, designCat, designCatNest, frontendWindow1, frontendWindow2, windowSlide, footerTip;
+let groupIntroNotice, groupIntroContent, groupName, cancelNotice, productWindow, backendDoor, backendWindow, androidWindow, designDoor, designCat, designCatNest, frontendWindow1, frontendWindow2, windowSlide, footerTip, signupBtn;
 
 //手指触点位置
 let preY, currentY;
@@ -52,7 +52,9 @@ window.onload = () => {
           intro = document.getElementById('teamIntroduce'),
           leadTowardsRight = document.getElementById('leadTowardsRight'),
           groupLogos = document.getElementsByClassName('groupLogo'),
-          groupLogoDiv = document.getElementById('groupLogo');
+          groupLogoDiv = document.getElementById('groupLogo'),
+          maskBeforeImgOnload = document.getElementsByClassName('maskBeforeImgOnload');
+    signupBtn = document.getElementById('signupBtn');
     footerTip = document.getElementById('footerTip');
     groupIntroNotice = document.getElementById('groupIntroNotice');
     groupIntroContent = document.getElementById('groupIntroContent');
@@ -71,11 +73,19 @@ window.onload = () => {
     windowSlide = document.getElementById("windowSlide");
 
 
+    getComputedStyle(loadingImg).background;
+
     //点击按钮，更换场景，监听dom
     continueBtn.onclick = () => {
         loadingImg.classList.add('perspect');
-        intro.classList.add('introClear');
-        continueBtn.style.display = "none";
+        intro.classList.remove('teamIntroducePresent');
+        intro.classList.add('objectClear');
+        continueBtn.classList.remove('continueBtnShake');
+        continueBtn.classList.add('objectClear');
+
+        for(const domObject of maskBeforeImgOnload){
+            domObject.style.display = "block";
+        }
 
         setTimeout(() => {
             loadingImg.classList.add('none');
@@ -92,21 +102,29 @@ window.onload = () => {
             }
 
             designCatNest.onclick = () => {
-                designCatNest.classList.add('transform1');
+                designCatNest.classList.add('catTransform');
             }
             
             //监听各种移动事件
             for(let logo of groupLogos){
                 logo.onclick = () => {
                     logo.src = logoInfo.get(logo.id).imgPath;
-                    moveImage.style.transform = "translateX(" + logoInfo.get(logo.id).moveDistance * window.innerHeight  + "px)";
+                    if(logo.id === "frontendLogo"){
+                        backgroundImageMove(moveWidth);
+                    }
+                    else{
+                        moveImage.style.transform = "translateX(" + logoInfo.get(logo.id).moveDistance * window.innerHeight + "px)";
+                        footerTip.style.zIndex = 1;
+                        signupBtn.style.zIndex = -1;
+                        leadTowardsRight.style.zIndex = 1;
+                    }
                 }
             }
             leadTowardsRight.onclick = () => {
                 backgroundImageMove(movePerStep * window.innerHeight);
             }
             document.addEventListener('touchstart', touchStart, {passive: false});
-        }, 3000);
+        }, 2500);
     }
 
     //播放音乐
@@ -312,10 +330,14 @@ function backgroundImageMove(distance){
     else if(!(distance - moveImageX < moveWidth)){
         trans = -moveWidth;
         footerTip.style.zIndex = 0;
+        signupBtn.style.zIndex = 1;
+        leadTowardsRight.style.zIndex = -1;
     }
 
     else{
         footerTip.style.zIndex = 1;
+        signupBtn.style.zIndex = -1;
+        leadTowardsRight.style.zIndex = 1;
         trans = moveImageX - distance;
     }
 
@@ -324,6 +346,8 @@ function backgroundImageMove(distance){
 
 //进行设备识别处理
 function quit(){
+    const body = document.getElementsByTagName("body")[0];
+    body.style.display = "block";
     let equipmentRe = /(Android|webOS|iPhone(X)?|iPod|BlackBerry)/i;
     if(!equipmentRe.test(navigator.userAgent)){
         document.write("请用手机浏览器打开，以获取最优体验！");

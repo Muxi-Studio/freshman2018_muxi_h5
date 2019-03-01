@@ -1,26 +1,28 @@
 const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = (env, argv) => ({
   entry:{
     move: './src/move.js',
   },
   output: {
-      path: path.resolve(__dirname, './dist'),
-      publicPath: argv.mode === 'production' ? "../" : "/",
-      filename: 'js/[name].js'
+    path: path.resolve(__dirname, './dist'),
+    publicPath: argv.mode === 'production' ? "./" : "/",
+    filename: 'js/[name].js'
   },
 
   module:{
     rules:[
       {
         test: /\.css$/,
+        // use: ["style-loader", "css-loader"],
         use: ExtractTextPlugin.extract({
-            fallback: "style-loader",
-            use: 'css-loader',
-            publicPath: '../',
-        })    
+          fallback: "style-loader",
+          use: "css-loader",
+          publicPath: "../"
+        })
       },
 
       {
@@ -39,7 +41,7 @@ module.exports = (env, argv) => ({
           {
             loader: 'url-loader',
             options: {
-              limit: 500,
+              limit: 1024,
               name: 'img/[name].[ext]',
             }
           }
@@ -63,6 +65,14 @@ module.exports = (env, argv) => ({
   plugins:[
     //独立打包css
     new ExtractTextPlugin('css/[name].css'),
+    new OptimizeCssAssetsPlugin({
+      assetNameRegExp: /\.css$/,
+      cssProcessor: require('cssnano'),
+      cssProcessorPluginOptions: {
+        preset: ['default', { discardComments: { removeAll: true } }],
+      },
+      canPrint: true
+    }),
 
     //对html模板进行处理，生成对应的html,引入需要的资源模块
     new HtmlWebpackPlugin({
@@ -70,7 +80,7 @@ module.exports = (env, argv) => ({
       filename:'index.html',//目标文件
       inject:true,//资源加入到底部
       hash:true,//加入版本号
-      chunks:['move'],
+      // chunks:['move'],
     }),
   ],
 

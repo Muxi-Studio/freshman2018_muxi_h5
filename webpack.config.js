@@ -9,10 +9,9 @@ module.exports = (env, argv) => ({
   },
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: argv.mode === 'production' ? "./" : "/",
+    publicPath: argv.mode === 'production' ? "http://ossmuxi-h5.muxixyz.com/2019spring/" : "/",
     filename: 'js/[name].js'
   },
-
   module:{
     rules:[
       {
@@ -21,7 +20,7 @@ module.exports = (env, argv) => ({
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
           use: "css-loader",
-          publicPath: "../"
+          // publicPath: "../"
         })
       },
 
@@ -43,6 +42,7 @@ module.exports = (env, argv) => ({
             options: {
               limit: 1024,
               name: 'img/[name].[ext]',
+              // publicPath: "http://ossmuxi-h5.muxixyz.com/2019spring/" 
             }
           }
         ]
@@ -54,7 +54,7 @@ module.exports = (env, argv) => ({
           loader: 'html-loader',
           options: {
             minimize: true,
-            attrs: ['img:src', 'audio:src', 'video:src']
+            attrs: ['img:src', 'audio:src', 'video:src'],
           }
         }
       }
@@ -79,7 +79,7 @@ module.exports = (env, argv) => ({
       template:'./move.html',//模板文件
       filename:'index.html',//目标文件
       inject:true,//资源加入到底部
-      hash:true,//加入版本号
+      hash:false,//加入版本号
       // chunks:['move'],
     }),
   ],

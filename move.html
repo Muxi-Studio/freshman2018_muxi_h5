@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=375, user-scalable=no" />    
     <!-- 全屏 -->
     <meta name="x5-fullscreen" content="true" />
+    <meta name=”x5-page-mode” content=”app”>
     <meta name="full-screen" content="yes" />
     <meta name="360-fullscreen" content="true" />
     <!-- iso app模式 -->
@@ -15,13 +16,14 @@
     <meta name="format-detection" content="telephone=no,email=no,adress=no" />
     <!-- 竖屏 -->
     <meta name="screen-orientation" content="portrait" />
+    <meta name=”x5-orientation” content=”portrait”>
     <!-- <link href="./src/move.css" rel="stylesheet" type="text/css"/> -->
-    <title>MuxiH5-2018</title>
+    <title>MuxiH5-2019</title>
 </head>
 <body>
     <div class="maskBeforeImgOnload">
         <div id="groupIntroNotice">
-            <img src="./static/groupIntroNotice.png" class="groupIntroNotice center" />
+            <img src="./static/groupIntroNotice.png" class="groupIntroNotice center" id="introNotice"/>
             <span id="cancelNotice">x</span>
             <div id="groupIntroduce">
                 <div id="groupIntroduceContain">
@@ -41,14 +43,12 @@
         <p id="footerTip">请继续向上滑行</p>
         <a href="http://muxi-studio.mikecrm.com/dHFg7N9"><button id="signupBtn" class="clickBtn">点击报名</button></a>
     </div>
-
     <div id="contain" class="origin">
-        <div id="loadingImg">
-            <p class="center teamIntroducePresent" id="teamIntroduce">&emsp;&emsp;木犀，一个被赋予有趣灵魂的学生互联网技术团队，隶属于i华大网络文化工作室，致力于打造各种适用方便的校园互联网产品。<br/>&emsp;&emsp;我们关注技术，也注重用户体验，把有趣的创意变为现实。</p>
-            <button id="continueBtn" class="clickBtn continueBtnShake">点击进入</button>
-        </div>
+        <img id="loadingImg" />
+        <p class="center" id="teamIntroduce">&emsp;&emsp;木犀，一个被赋予有趣灵魂的学生互联网技术团队，隶属于i华大网络文化工作室，致力于打造各种适用方便的校园互联网产品。<br/>&emsp;&emsp;我们关注技术，也注重用户体验，把有趣的创意变为现实。</p>
+        <button id="continueBtn" class="clickBtn">点击进入</button>
         <div class="maskBeforeImgOnload">
-            <img id="backgroundImg" src="./static/background.png" class="none origin"/>
+            <img id="backgroundImg" class="origin"/>
             <div class="productHouse house">
                 <img src="./static/productIndoor.png" id="productIndoor"/>
                 <div id="productWindow">
@@ -59,6 +59,7 @@
                 </div>
                 <img src="./static/productHouse.png" class="houseSize" />
                 <div id="productLight" class="light"></div>
+                <span id="arrowTip">→</span>
             </div>
             <div class="backendHouse house">
                     <img src="./static/backendIndoor.png" id="backendIndoor" />

@@ -10,33 +10,27 @@
 }
 html,body{
     width: 100%;
-    height: 100vh;
+    height: 100%;
     overflow: hidden;
     position: fixed;
 }
-body{
-    display: none;
-}
 .maskBeforeImgOnload{
     display: none;
-}
-#loadingImg{
-    width: 100%;
-    height: 100%;
-    background: url(../static/loading.png) no-repeat center;
-    background-size: cover;
+    width: 0;
+    height: 0;
 }
 #backgroundImg{
+    position: absolute;
     z-index: -1;
-    height: 100vh;
+    height: 100%;
 }
 #audioBtn{
     position: fixed;
     left: 330px;
-    top: 2vh;
+    top: 2%;
     width: 39px;
     height: 39px;
-    z-index: 1;
+    z-index: -1;
     cursor: pointer;
 }
 .audioRotate{
@@ -57,7 +51,7 @@ body{
     position: relative;
     left: 0;
     top: 0;
-    height: 100vh;
+    height: 100%;
     perspective: 100px;
     touch-action: none;
 }
@@ -78,26 +72,30 @@ body{
     top: 50%;
     transform: translate(-50%, -50%);
 }
+#loadingImg{
+    position: absolute;
+    left: 0;
+    top: 0;
+}
 #teamIntroduce{
     font-size: 13px;
     width: 200px;
     /* text-align: center; */
     color: #b0983e;
     text-shadow: 0 0 30px white;
-    top: 36.4vh;
+    top: 36.4%;
     transform: translateX(-50%);
     perspective: 100px;
+    opacity: 0;
 }
 .teamIntroducePresent{
-    opacity: 0;
-    animation: 2s introducePresent 0.3s ease-out forwards;
+    animation: 2s introducePresent ease-out forwards;
 }
 .objectClear{
     animation: 1s clear linear forwards;
 }
 @keyframes introducePresent {
     0% {  
-        opacity: 0;
         transform: translateX(-50%) translateZ(100px);
     }
     20%{
@@ -125,6 +123,7 @@ body{
         transform: translateX(-50%) translateY(10px) translateZ(-5px);
     }
     100% {
+        display: block;
         opacity: 1;
         transform: translateX(-50%) translateZ(0px);
     }
@@ -140,7 +139,7 @@ body{
 .clickBtn{
     position: absolute;
     left: 50%;
-    top: 69.1vh;
+    top: 69.1%;
     color: #ccaf45;
     font-size: 15px;
     width: 103px;
@@ -153,19 +152,19 @@ body{
     cursor: pointer;
     transform: translateX(-50%);
 }
+#continueBtn{
+    top: 100%;
+}
 .continueBtnShake{
-    opacity: 0;
     animation: 2s buttonShake 2.5s ease-out forwards;
 }
 @keyframes buttonShake{
     0% {
-        opacity: 0;
         top: 0;
         transform: translateX(-50%) rotate(0);
     }
     15% {
-        opacity: 1;
-        top: 69.1vh;
+        top: 69.1%;
         transform: translateX(-50%) rotate(0);
     }
     30%{
@@ -194,13 +193,13 @@ body{
         transform: translateX(-50%) rotate(-5deg);
     }
     100% {
-        opacity: 1;
+        top: 69.1%;
         transform: translateX(-50%) rotate(0deg);
     }
 }
 #signupBtn{
     position: fixed;
-    top: 92vh;
+    top: 92%;
     z-index: -1;
     box-shadow: 0 0 5px 0px yellow, 0 0 5px 0px yellow inset;
     text-shadow: 0 0 5px yellow;
@@ -215,26 +214,32 @@ body{
 }
 .frontendHouse{
     left: 256.6vh;
-    top: 42vh; 
+    left: calc(var(--vh, 1vh) * 256.6);
+    top: 42%; 
 }
 .backendHouse{
     left: 185.5vh;
-    top: 49vh;
+    left: calc(var(--vh, 1vh) * 185.5);
+    top: 49%;
 }
 .androidHouse{
     left: 123.7vh;
-    top: 40vh;
+    left: calc(var(--vh, 1vh) * 123.7);
+    top: 40%;
 }
 .designHouse{
     left: 67.5vh;
-    top: 50vh;
+    left: calc(var(--vh, 1vh) * 67.5);
+    top: 50%;
 }
 .productHouse{
     left: 11.2vh;
-    top: 36vh; 
+    left: calc(var(--vh, 1vh) * 11.2);
+    top: 36%; 
 }
 .houseSize{
-    width: 35vh;
+    width: 35vh; /* 为不支持自定义属性的浏览器做降级处理 */ 
+    width: calc(var(--vh, 1vh) * 35);
 }
 .light{
     position: absolute;
@@ -275,7 +280,7 @@ body{
 #backendDoor{
     position: absolute;
     top: 44%;
-    left: 8.4%;
+    left: 8.1%;
     width: 24%;
     height: 36.3%;
     z-index: 1;
@@ -445,14 +450,12 @@ body{
 }
 .groupIntroNotice{
     width: 75%;
-    height: 67.5vh;
+    height: 67.5%;
 }
 #cancelNotice{
     position: absolute;
     left: 82%;
     top: 15%;
-    width: 5%;
-    height: 5%;
     font-size: 25px;
     color: #eeddb0;
 }
@@ -567,19 +570,47 @@ body{
 }
 @keyframes catTranslate{
     0% {  
-        transform: translateX(-100%);
+        transform: translateY(-100%);
     }
     100% {
-        transform: translateX(0);
+        transform: translateY(0);
     }
 }
 #footerTip{
-    position: absolute;
+    position: fixed;
     left: 0;
-    top: 93.5vh;
+    top: 93%;
     width: 100%;
     text-align: center;
     text-shadow: 0 0 8px yellow;
     font-size: 16px;
     color: white;
+}
+#arrowTip{
+    position: absolute;
+    left: 40.5%;
+    top: -12%;
+    z-index: 1;
+    color: #fff;
+    text-shadow: 0 0 30px #fff;
+    font-size: 25px;
+    font-weight: bold;
+    animation: 3s arrowTipRotate linear infinite;
+}
+@keyframes arrowTipRotate{
+    0% {  
+        transform: translateX(-2px) translateY(-2px) rotateZ(60deg) scale(1.0);
+    }
+    25%{
+        transform: translateX(2px) translateY(-2px) rotateZ(60deg);
+    }
+    50%{
+        transform: translateX(2px) translateY(2px) rotateZ(60deg) scale(1.2);
+    }
+    75%{
+        transform: translateX(-2px) translateY(2px) rotateZ(60deg);
+    }
+    100% {
+        transform: translateX(-2px) translateY(-2px) rotateZ(60deg) scale(1.0);
+    }
 }

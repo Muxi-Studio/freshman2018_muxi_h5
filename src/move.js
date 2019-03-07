@@ -6,6 +6,8 @@ import androidLight from "../static/androidLight.png";
 import backendLight from "../static/backendLight.png";
 import designLight from "../static/designLight.png";
 import productLight from "../static/productLight.png";
+import LoadingImage from "../static/loading.png";
+import BackgroundImage from "../static/background.png";
 
 //正则匹配，获取偏移
 const movePatt = new RegExp(/translateX\((-?(?:\d+(?:\.\d+)?))(?:px)\)/, "i");
@@ -23,7 +25,7 @@ const logoInfo = new Map([
     ['designLogo'  , {moveDistance: -0.588, imgPath: designLight}],
     ['backendLogo' , {moveDistance: -1.750, imgPath: backendLight}],
     ['androidLogo' , {moveDistance: -1.153, imgPath: androidLight}],
-    ['frontendLogo', {moveDistance: -2.434, imgPath: frontendLight}],
+    ['frontendLogo', {moveDistance: -2.423, imgPath: frontendLight}],
 ]);
 //每次点击移动提示光标的移动距离
 const movePerStep = 0.28;
@@ -31,112 +33,134 @@ const movePerStep = 0.28;
 //存储背景图片以及最大移动距离
 let moveImage, moveWidth;
 //存储dom节点
-let groupIntroNotice, groupIntroContent, groupName, cancelNotice, productWindow, backendDoor, backendWindow, androidWindow, designDoor, designCat, designCatNest, frontendWindow1, frontendWindow2, windowSlide, footerTip, signupBtn;
+let groupIntroNotice, groupIntroContent, groupName, cancelNotice, productWindow, backendDoor, backendWindow, androidWindow, designDoor, designCat, designCatNest, frontendWindow1, frontendWindow2, windowSlide, footerTip, signupBtn, body;
 
 //手指触点位置
 let preY, currentY;
-
-window.onload = () => {
-    //设备识别
-    if(!quit()){
-        return;
-    }
-
-    //获取dom，方便频繁操作
-    const continueBtn = document.getElementById('continueBtn'),
-          image = document.getElementById('backgroundImg'),
-          loadingImg = document.getElementById('loadingImg'),
-          audioBtn = document.getElementById('audioBtn'),
-          audioPlay = document.getElementById('audioPlay'),
-          lights = document.getElementsByClassName('light'),
-          intro = document.getElementById('teamIntroduce'),
-          leadTowardsRight = document.getElementById('leadTowardsRight'),
-          groupLogos = document.getElementsByClassName('groupLogo'),
-          groupLogoDiv = document.getElementById('groupLogo'),
-          maskBeforeImgOnload = document.getElementsByClassName('maskBeforeImgOnload');
-    signupBtn = document.getElementById('signupBtn');
-    footerTip = document.getElementById('footerTip');
-    groupIntroNotice = document.getElementById('groupIntroNotice');
-    groupIntroContent = document.getElementById('groupIntroContent');
-    groupName = document.getElementById('groupName');
-    cancelNotice = document.getElementById('cancelNotice');
-    moveImage = document.getElementById('contain');
-    productWindow = document.getElementById("productWindow");
-    backendDoor = document.getElementById("backendDoor");
-    backendWindow = document.getElementById("backendWindow");
-    androidWindow = document.getElementById("androidWindow");
-    designDoor = document.getElementById("designDoor");
-    designCat = document.getElementById("designCat");
-    designCatNest = document.getElementById("designCatNest");
-    frontendWindow1 = document.getElementById("frontendWindow1");
-    frontendWindow2 = document.getElementById("frontendWindow2");
-    windowSlide = document.getElementById("windowSlide");
-
-
-    getComputedStyle(loadingImg).background;
-
-    //点击按钮，更换场景，监听dom
-    continueBtn.onclick = () => {
-        loadingImg.classList.add('perspect');
-        intro.classList.remove('teamIntroducePresent');
-        intro.classList.add('objectClear');
-        continueBtn.classList.remove('continueBtnShake');
-        continueBtn.classList.add('objectClear');
-
-        for(const domObject of maskBeforeImgOnload){
-            domObject.style.display = "block";
-        }
-
-        setTimeout(() => {
-            loadingImg.classList.add('none');
-            image.classList.remove('none');
-            moveImage.style.transform = "translateX(0)";
-            leadTowardsRight.style.zIndex = 1;
-            groupLogoDiv.style.zIndex = 1;
-            footerTip.style.zIndex = 1;
-            moveWidth = image.width - window.innerWidth;
-
-            //监听圆环点击事件
-            for(let light of lights){
-                clickLight(light);
+ 
+//设备识别
+if(quit()){
+    window.onload = () => {
+        //获取dom，方便频繁操作
+        const continueBtn = document.getElementById('continueBtn'),
+              image = document.getElementById('backgroundImg'),
+              loadingImg = document.getElementById('loadingImg'),
+              audioBtn = document.getElementById('audioBtn'),
+              audioPlay = document.getElementById('audioPlay'),
+              lights = document.getElementsByClassName('light'),
+              intro = document.getElementById('teamIntroduce'),
+              leadTowardsRight = document.getElementById('leadTowardsRight'),
+              groupLogos = document.getElementsByClassName('groupLogo'),
+              groupLogoDiv = document.getElementById('groupLogo'),
+              maskBeforeImgOnload = document.getElementsByClassName('maskBeforeImgOnload');
+        signupBtn = document.getElementById('signupBtn');
+        footerTip = document.getElementById('footerTip');
+        groupIntroNotice = document.getElementById('groupIntroNotice');
+        groupIntroContent = document.getElementById('groupIntroContent');
+        groupName = document.getElementById('groupName');
+        cancelNotice = document.getElementById('cancelNotice');
+        moveImage = document.getElementById('contain');
+        productWindow = document.getElementById("productWindow");
+        backendDoor = document.getElementById("backendDoor");
+        backendWindow = document.getElementById("backendWindow");
+        androidWindow = document.getElementById("androidWindow");
+        designDoor = document.getElementById("designDoor");
+        designCat = document.getElementById("designCat");
+        designCatNest = document.getElementById("designCatNest");
+        frontendWindow1 = document.getElementById("frontendWindow1");
+        frontendWindow2 = document.getElementById("frontendWindow2");
+        windowSlide = document.getElementById("windowSlide");
+        
+        loadingImg.src = LoadingImage;
+        loadingImg.onload = () => {
+            audioBtn.style.zIndex = 1;
+            image.src = BackgroundImage;
+            image.onload = () => {
+                moveWidth = image.width / image.height * window.innerHeight - window.innerWidth;
             }
-
-            designCatNest.onclick = () => {
-                designCatNest.classList.add('catTransform');
+            const loadingImageRatio = loadingImg.width / loadingImg.height;
+            if(window.innerWidth / window.innerHeight > loadingImageRatio){
+                loadingImg.style.width = window.innerWidth + 'px';
+                loadingImg.style.top = -(window.innerWidth / loadingImageRatio - window.innerHeight) / 2 + "px";
             }
-            
-            //监听各种移动事件
-            for(let logo of groupLogos){
-                logo.onclick = () => {
-                    logo.src = logoInfo.get(logo.id).imgPath;
-                    if(logo.id === "frontendLogo"){
-                        backgroundImageMove(moveWidth);
+            else{
+                loadingImg.style.height = window.innerHeight + 'px';
+                loadingImg.style.left = -(window.innerHeight * loadingImageRatio - window.innerWidth) / 2 + "px";
+            }
+            intro.classList.add('teamIntroducePresent');
+            continueBtn.classList.add('continueBtnShake');
+            //点击按钮，更换场景，监听dom
+            continueBtn.onclick = () => {
+                loadingImg.classList.add('perspect');
+                intro.classList.remove('teamIntroducePresent');
+                intro.classList.add('objectClear');
+                continueBtn.classList.remove('continueBtnShake');
+                continueBtn.classList.add('objectClear');
+    
+                setTimeout(() => {
+                    loadingImg.classList.add('none');
+                    // image.classList.remove('none');
+                    for(const domObject of maskBeforeImgOnload){
+                        domObject.style.display = "block";
                     }
-                    else{
-                        moveImage.style.transform = "translateX(" + logoInfo.get(logo.id).moveDistance * window.innerHeight + "px)";
-                        footerTip.style.zIndex = 1;
-                        signupBtn.style.zIndex = -1;
-                        leadTowardsRight.style.zIndex = 1;
+                    moveImage.style.transform = "translateX(0)";
+                    leadTowardsRight.style.zIndex = 1;
+                    groupLogoDiv.style.zIndex = 1;
+                    footerTip.style.zIndex = 1;
+    
+                    //监听圆环点击事件
+                    for(let light of lights){
+                        clickLight(light);
                     }
-                }
-            }
-            leadTowardsRight.onclick = () => {
-                backgroundImageMove(movePerStep * window.innerHeight);
-            }
-            document.addEventListener('touchstart', touchStart, {passive: false});
-        }, 2500);
-    }
+    
+                    designCatNest.onclick = () => {
+                        if(designCat.classList.contains('openWindow')){
+                            designCat.classList.add("closeWindow");
+                            setTimeout(() => {
+                                designCat.classList.remove("openWindow");
+                                designCat.classList.remove("closeWindow");
+                            }, 1000);
+                        }
+                        else{
+                            designCat.classList.add('openWindow');
+                        }
+                    }
+                    
+                    //监听各种移动事件
+                    for(let logo of groupLogos){
+                        logo.onclick = () => {
+                            logo.src = logoInfo.get(logo.id).imgPath;
+                            if(logo.id === "frontendLogo"){
+                                backgroundImageMove(moveWidth);
+                            }
+                            else{
+                                moveImage.style.transform = "translateX(" + logoInfo.get(logo.id).moveDistance * window.innerHeight + "px)";
+                                footerTip.style.zIndex = 1;
+                                signupBtn.style.zIndex = -1;
+                                leadTowardsRight.style.zIndex = 1;
+                            }
+                        }
+                    }
+                    leadTowardsRight.onclick = () => {
+                        backgroundImageMove(movePerStep * window.innerHeight);
+                    }
 
-    //播放音乐
-    audioBtn.onclick = () => { 
-        if(audioPlay.paused){
-            audioPlay.play();
-            audioBtn.classList.add('audioRotate');
+                    document.addEventListener('touchstart', touchStart, {passive: false});
+                }, 2500);
+            }
         }
-        else{
-            audioPlay.pause();
-            audioPlay.currentTime = 0;
-            audioBtn.classList.remove('audioRotate');
+    
+        //播放音乐
+        audioBtn.onclick = () => { 
+            if(audioPlay.paused){
+                audioPlay.play();
+                audioBtn.classList.add('audioRotate');
+            }
+            else{
+                audioPlay.pause();
+                audioPlay.currentTime = 0;
+                audioBtn.classList.remove('audioRotate');
+            }
         }
     }
 }
@@ -160,7 +184,7 @@ function clickLight(light){
                     flag = false;
                 }, 1000);
             }
-            else if(e.target === cancelNotice){
+            else if(e.target === cancelNotice || e.target.id === 'introNotice'){
                 if(light.classList.contains('none')){
                     recoverLight(light, clearTimeFlag.flag);
                     //动画执行完毕，light才会清除none，进行标记节流
@@ -208,6 +232,7 @@ function dealLight(light, clearTimeFlag){
             windowSlide.play();
             break;
         };
+        default: break;
     }
 
     setTimeout(() => {
@@ -275,6 +300,7 @@ function recoverLight(light, timeFlag){
             }, 1000);
             break;
         };
+        default: break;
     }
 
     setTimeout(() => {
@@ -329,7 +355,7 @@ function backgroundImageMove(distance){
 
     else if(!(distance - moveImageX < moveWidth)){
         trans = -moveWidth;
-        footerTip.style.zIndex = 0;
+        footerTip.style.zIndex = -1;
         signupBtn.style.zIndex = 1;
         leadTowardsRight.style.zIndex = -1;
     }
@@ -346,18 +372,27 @@ function backgroundImageMove(distance){
 
 //进行设备识别处理
 function quit(){
-    const body = document.getElementsByTagName("body")[0];
-    body.style.display = "block";
     let equipmentRe = /(Android|webOS|iPhone(X)?|iPod|BlackBerry)/i;
+    body = document.getElementsByTagName('body')[0];
     if(!equipmentRe.test(navigator.userAgent)){
-        document.write("请用手机浏览器打开，以获取最优体验！");
+        body.innerHTML = "请用手机浏览器打开，以获取最优体验！";
         return false;
     }
-    if(document.documentElement.clientWidth > document.documentElement.clientHeight){
-        document.write("请用竖屏观看，以获取最优体验！");
+    else if(document.documentElement.clientWidth > document.documentElement.clientHeight){
+        body.innerHTML = "请用竖屏观看，以获取最优体验！";
         return false;
     }
-    return true;
+    else{
+        setVHUnit();
+        window.addEventListener('resize', () => {setVHUnit()});
+        return true;
+    }
+}
+
+function setVHUnit(){
+    let vh = window.innerHeight * 0.01;
+    // 把--vh的值设置到文档的根元素中
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
 }
 
 //处理触摸事件，进行移动
